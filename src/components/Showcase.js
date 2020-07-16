@@ -9,10 +9,10 @@ import { Button } from '@material-ui/core'
 const Showcase = () => {
   const [modalVisible, setModalVisible] = useState(false)
   const history = useHistory()
-  const { user } = useContext(AuthContext)
+  const { auth } = useContext(AuthContext)
 
   const handleClick = () => {
-    user ? history.push('rsvp') : setModalVisible(true)
+    auth ? history.push('rsvp') : setModalVisible(true)
   }
   return (
     <div style={styles.container}>

@@ -24,7 +24,7 @@ const AppRouter = () => {
   return (
     <BrowserRouter>
       <Switch>
-        <PrivateRoute path="/rsvp" authenticated={!!auth?.user} component={Rsvp}></PrivateRoute>
+        <PrivateRoute path="/rsvp" authenticated={!!auth?.auth} component={Rsvp}></PrivateRoute>
         <Route path="/gallery" component={Gallery} />
         <Route exact path="/" component={Home}></Route>
       </Switch>

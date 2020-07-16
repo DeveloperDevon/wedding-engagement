@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Button, FormControl, Input, InputLabel } from '@material-ui/core'
 import Modal from 'react-modal'
-import { auth } from '../../services/firebase'
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { purple } from '@material-ui/core/colors';
+import { writeStorage } from '@rehooks/local-storage';
 
 Modal.setAppElement('#root')
 
@@ -22,19 +22,21 @@ const customStyles = {
 };
 
 const AuthModal = ({ modalVisible, setModalVisible }) => {
+  const code = localStorage.getItem('secretCode') === process.env.REACT_APP_SECRET_CODE ? localStorage.getItem('secretCode') : ''
   const history = useHistory()
   const [guestName, setGuestName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [secretCode, setSecretCode] = useState(code)
+
+  useEffect(() => {
+    writeStorage('secretCode', secretCode)
+  }, [secretCode])
 
   const login = async () => {
-    try {
-      await auth().signInWithEmailAndPassword(email, password)
-      history.push('/rsvp', { guestName })
+    if (process.env.REACT_APP_SECRET_CODE === secretCode) {
       localStorage.setItem('guestName', guestName ? guestName : '')
-
-    } catch (error) {
-      alert(error.message)
+      history.push('/rsvp')
+    } else {
+      alert('Wrong') //TODO create bad request handler
     }
   }
 
@@ -53,16 +55,12 @@ const AuthModal = ({ modalVisible, setModalVisible }) => {
         <form onSubmit={e => e.preventDefault() && false} style={styles.form}>
           <ThemeProvider theme={theme}>
             <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="secretCode">Secret Code</InputLabel>
+              <Input id="secretCode" name="secretCode" autoComplete="off" autoFocus value={secretCode} onChange={e => setSecretCode(e.target.value)} />
+            </FormControl>
+            <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="guestName">Your name</InputLabel>
-              <Input id="guestName" name="guestName" autoComplete="off" autoFocus value={guestName} onChange={e => setGuestName(e.target.value)} />
-            </FormControl>
-            <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="email">Email Address</InputLabel>
-              <Input id="email" name="email" autoComplete="off" value={email} onChange={e => setEmail(e.target.value)} />
-            </FormControl>
-            <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="password">Password</InputLabel>
-              <Input name="password" type="password" id="password" autoComplete="off" value={password} onChange={e => setPassword(e.target.value)} />
+              <Input id="guestName" name="guestName" autoComplete="off" value={guestName} onChange={e => setGuestName(e.target.value)} />
             </FormControl>
           </ThemeProvider>
           <div style={styles.buttonContainer}>
