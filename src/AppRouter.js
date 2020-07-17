@@ -19,7 +19,6 @@ const PrivateRoute = ({ component: Component, authenticated, ...rest }) => {
 
 const AppRouter = () => {
   const auth = useContext(AuthContext)
-  console.log('???', auth)
   if (!auth || auth?.loading) return <div>Loading...</div>
   if (auth?.error) return <div>Error {auth.error}</div>
 

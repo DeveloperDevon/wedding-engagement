@@ -8,7 +8,7 @@ import { db } from '../services/firebase'
 const Rsvp = () => {
   const [guestName, setGuestName] = useState('')
   const [attending, setAttending] = useState(null)
-  const [numOfGuests, setNumOfGuests] = useState(1)
+  const [additionalGuestsNum, setAdditionalGuestsNum] = useState(0)
   const [guestNames, setGuestNames] = useState([])
   const [modalVisible, setModalVisible] = useState(false)
 
@@ -23,10 +23,8 @@ const Rsvp = () => {
     setGuestNames(arrCopy)
   }
 
-  const genPayload = (isAttending) => {
-    return isAttending === 'no'
-      ? { attending: 'no', numOfGuests: 0, guestNames: [], submittedBy: guestName, date: new Date() }
-      : { attending, numOfGuests, guestNames: guestNames.slice(0, numOfGuests), submittedBy: guestName, date: new Date() }
+  const genPayload = () => {
+    return { attending, numOfGuests: additionalGuestsNum+1, guestNames: [guestName, ...guestNames.slice(0, additionalGuestsNum)], submittedBy: guestName, date: new Date() }
   }
 
   const handleSubmit = async (e) => {
@@ -45,32 +43,36 @@ const Rsvp = () => {
         <Paper style={styles.paper}>
           <form style={styles.form} onSubmit={handleSubmit}>
             <h2 style={styles.greetingText}>Hello {guestName},</h2>
-            <h3 style={{ marginBottom: 10 }}>Will you be able to attend our wedding? {attending}</h3>
+            <h3 style={{ marginBottom: 10 }}>Will you be able to attend our wedding? <span style={{fontSize: 28}}>{attending}</span></h3>
             <ButtonGroup color="default" aria-label="outlined primary button group">
               <Button onClick={() => setAttending('yes')} style={{ backgroundColor: attending === 'yes' ? '#f8e7d1' : '' }}>Yes</Button>
               <Button onClick={() => setAttending('no')} style={{ backgroundColor: attending === 'no' ? '#f8e7d1' : '' }}>No</Button>
             </ButtonGroup>
 
-            {attending === 'no' && <h3 style={{ marginTop: 10 }}>We're sorry you wont be able to join us!</h3>}
-
-            {attending === 'yes' &&
+            {attending !== null &&
               <div>
                 <FormControl style={{ marginTop: 10 }}>
-                  <h3>How many guests will be attending? {numOfGuests}</h3>
+                  <h3>Invited guests that {attending === 'yes' ? 'will be attending?' : 'wont be able to make it?'} <span style={{fontSize: 28}}>{additionalGuestsNum+1}</span></h3>
                   <div style={{ display: 'flex'}}>
-                    <Input disabled type="number" value={numOfGuests} style={{ width: '25%', fontFamily: 'Allura' }} />
-                    <IconButton disabled={numOfGuests <= 1} onClick={() => setNumOfGuests(prev => --prev) }><Remove /></IconButton>
-                    <IconButton disabled={numOfGuests >= 5} onClick={() => setNumOfGuests(prev => ++prev) }><Add /></IconButton>
+                    {/* <Input disabled type="number" value={additionalGuestsNum} style={{ width: '25%', fontFamily: 'Allura' }} /> */}
+                    <IconButton disabled={additionalGuestsNum <= 0} onClick={() => setAdditionalGuestsNum(prev => --prev) }><Remove /></IconButton>
+                    <IconButton disabled={additionalGuestsNum >= 5} onClick={() => setAdditionalGuestsNum(prev => ++prev) }><Add /></IconButton>
                   </div>
                 </FormControl>
               </div>
             }
 
-            {attending === 'yes' && Array.from(Array(parseInt(numOfGuests)), (_, i) => {
+            {attending !== null && <div>
+            <FormControl>
+              <Input placeholder="Guest 1" disabled style={{ fontFamily: 'Allura' }} value={guestName} />
+            </FormControl>
+            </div>}
+
+            {additionalGuestsNum >= 0 && Array.from(Array(parseInt(additionalGuestsNum)), (_, i) => {
               return (
                 <div key={i}>
                   <FormControl>
-                    <Input placeholder={`Guest ${i + 1}`} style={{ fontFamily: 'Allura' }} onChange={(e) => guestNamesChange({ name: e.target.value, index: i })} />
+                    <Input placeholder={`Additional Guest ${i + 1}`} style={{ fontFamily: 'Allura' }} required onChange={(e) => guestNamesChange({ name: e.target.value, index: i })} />
                   </FormControl>
                 </div>
               )

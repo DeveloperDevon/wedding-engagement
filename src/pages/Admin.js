@@ -19,24 +19,12 @@ const Admin = () => {
     setLoading(isLoading)
     setError(hasError)
     setResponses(value?.docs.map(doc => doc.data()))
+    console.log('!!', responses)
   }, [loading, value, error])
 
-  const scrubData = () => {
-    // const guestNames = responses?.map(response => [...response.guestNames])
-    const guestNames = responses?.map(response => [].concat.apply([], response.guestNames))
-    const attending = [].concat.apply([], guestNames)
-    const notAttending = responses?.filter(a => a.attending !== 'yes').map(b => b.submittedBy)
-    const responded = responses?.length
-    const invited = [].concat.apply([], [...attending, notAttending])
-
-
-
-    const scrubbed = { attending, notAttending, responded, invited }
-    console.log(scrubbed)
-    return scrubbed
+  const getNumOfGuests = (arr, condition) => {
+    return parseInt(arr.filter(response => response.attending === condition).reduce((a, b) => a.numOfGuests+b.numOfGuests))
   }
-
-  const scrubbed = scrubData()
 
   return (
   loading ? <div>Loading</div>
@@ -44,9 +32,9 @@ const Admin = () => {
   :
   <Layout>
     <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: 10, fontFamily: "Allura"}}>
-      <h3>Attending: {scrubbed?.attending.length}</h3>
-      <h3>Not Attending: {scrubbed?.notAttending.length}</h3>
-      <h3>Responses: {scrubbed.responded}</h3>
+      <h3>Attending: {getNumOfGuests(responses, 'yes')}</h3>
+      <h3>Not Attending: {getNumOfGuests(responses, 'no')}</h3>
+      {/* <h3>Responses: {getNumOfGuests(responses, 'yes') + getNumOfGuests(responses, 'no')}</h3> */}
     </div>
     <TableContainer style={{ marginTop: 25 }} component={Paper}>
       <h2 style={{ width: '100%', textAlign: 'center', fontFamily: "Allura", textDecoration: 'underline' }}>Guestlist</h2>
@@ -65,7 +53,8 @@ const Admin = () => {
                   response.attending === 'yes' ?
                   response.guestNames.map((guest, i) =>
                   <div style={{ color: 'green' }} key={i}>{`${guest}`}<IncludeComma arr={response.guestNames} i={i} /></div>) :
-                  <div style={{ color: 'red' }}>{response.submittedBy}</div>
+                  response.guestNames.map((guest, i) =>
+                  <div style={{ color: 'red' }} key={i}>{`${guest}`}<IncludeComma arr={response.guestNames} i={i} /></div>)
                 }
               </TableCell>
 
