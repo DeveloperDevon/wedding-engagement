@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import { Button, ButtonGroup, FormControl, IconButton, Input, Paper } from '@material-ui/core'
+import { Add, Remove } from '@material-ui/icons'
+import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout'
 import ResponseModal from '../components/Modals/ResponseModal'
-import { Paper, Button, ButtonGroup, FormControl, Input } from '@material-ui/core'
 import { db } from '../services/firebase'
 
 const Rsvp = () => {
@@ -15,12 +16,6 @@ const Rsvp = () => {
   useEffect(() => {
     setGuestName(localStorage.getItem('guestName'))
   }, [])
-
-  const handleAmountChange = (e) => {
-    let num = e.target.value
-    num = num < 1 ? num = 1 : num > 5 ? num = 5 : num
-    setNumOfGuests(num)
-  }
 
   const guestNamesChange = ({ name, index }) => {
     let arrCopy = guestNames
@@ -46,6 +41,7 @@ const Rsvp = () => {
     <Layout>
       <div style={styles.pageContainer}>
         <ResponseModal modalVisible={modalVisible} setModalVisible={setModalVisible} attending={attending} />
+
         <Paper style={styles.paper}>
           <form style={styles.form} onSubmit={handleSubmit}>
             <h2 style={styles.greetingText}>Hello {guestName},</h2>
@@ -61,7 +57,11 @@ const Rsvp = () => {
               <div>
                 <FormControl style={{ marginTop: 10 }}>
                   <h3>How many guests will be attending? {numOfGuests}</h3>
-                  <Input type="number" value={numOfGuests} style={{ width: '25%', fontFamily: 'Allura' }} onChange={(e) => handleAmountChange(e)} />
+                  <div style={{ display: 'flex'}}>
+                    <Input disabled type="number" value={numOfGuests} style={{ width: '25%', fontFamily: 'Allura' }} />
+                    <IconButton disabled={numOfGuests <= 1} onClick={() => setNumOfGuests(prev => --prev) }><Remove /></IconButton>
+                    <IconButton disabled={numOfGuests >= 5} onClick={() => setNumOfGuests(prev => ++prev) }><Add /></IconButton>
+                  </div>
                 </FormControl>
               </div>
             }

@@ -1,7 +1,8 @@
-import React from 'react'
-import { useHistory } from 'react-router-dom'
-import Modal from 'react-modal'
 import { Button } from '@material-ui/core'
+import React from 'react'
+import Modal from 'react-modal'
+import { useHistory } from 'react-router-dom'
+import { goToRegistry } from '../../helpers'
 
 Modal.setAppElement('#root')
 
@@ -17,10 +18,6 @@ const customStyles = {
     fontFamily: 'Allura',
   }
 };
-
-const goToRegistry = () => {
-  window.location.replace('https://www.amazon.com/wedding/share/chandleranddevon-november2020')
-}
 
 const ResponseModal = ({ modalVisible, setModalVisible, attending }) => {
   const history = useHistory()

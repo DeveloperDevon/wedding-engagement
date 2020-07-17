@@ -1,9 +1,10 @@
-import React, { useState, useContext } from 'react'
-import { AuthContext } from '../contexts/auth'
-import img3 from '../assets/img/img3.jpg'
-import { useHistory } from 'react-router-dom'
-import AuthModal from './Modals/AuthModal'
 import { Button } from '@material-ui/core'
+import React, { useContext, useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import img3 from '../assets/img/img3.jpg'
+import { AuthContext } from '../contexts/auth'
+import { handleRsvp } from '../helpers'
+import AuthModal from './Modals/AuthModal'
 
 
 const Showcase = () => {
@@ -11,20 +12,11 @@ const Showcase = () => {
   const history = useHistory()
   const { auth } = useContext(AuthContext)
 
-  const handleClick = () => {
-    auth ? history.push('rsvp') : setModalVisible(true)
-  }
   return (
     <div style={styles.container}>
       <div style={styles.textContainer}>
         <h1 style={styles.text}>We're Getting Married!</h1>
-        <Button
-          onClick={handleClick}
-          variant="contained"
-          style={styles.rsvpButton}
-        >
-          R.S.V.P.
-        </Button>
+        <Button onClick={() => handleRsvp(auth, history, setModalVisible)} variant="contained" style={styles.rsvpButton}>R.S.V.P.</Button>
 
         <AuthModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
       </div>

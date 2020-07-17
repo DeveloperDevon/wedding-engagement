@@ -1,7 +1,7 @@
-import React, { useState, useEffect, createContext } from 'react'
-import { auth } from '../services/firebase'
-import { useAuthState } from 'react-firebase-hooks/auth'
 import { useLocalStorage } from '@rehooks/local-storage';
+import React, { createContext, useEffect, useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../services/firebase';
 
 export const AuthContext = createContext({})
 
@@ -11,7 +11,12 @@ export const AuthProvider = ({ children }) => {
   const [secretCode] = useLocalStorage('secretCode');
 
   useEffect(() => {
-    setAuthContext({ auth: secretCode === process.env.REACT_APP_SECRET_CODE, loading, error })
+    setAuthContext({
+      auth: secretCode === process.env.REACT_APP_SECRET_CODE,
+      admin: secretCode === process.env.REACT_APP_ADMIN_TOKEN,
+      loading,
+      error
+    })
   }, [secretCode, loading, error])
 
   return (
