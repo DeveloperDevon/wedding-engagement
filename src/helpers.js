@@ -4,5 +4,6 @@ export const goToRegistry = () =>
   );
 
 export const handleRsvp = (auth, admin, history, showModal) => {
-  auth ? history.push('rsvp') : admin ? history.push('/admin') : showModal(true)
+  const guestName = localStorage.getItem('guestName')
+  auth && !!guestName ? history.push('rsvp') : admin ? history.push('/admin') : showModal(true)
 }

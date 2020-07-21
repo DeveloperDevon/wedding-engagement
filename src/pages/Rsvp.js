@@ -12,7 +12,6 @@ const Rsvp = () => {
   const [guestNames, setGuestNames] = useState([])
   const [modalVisible, setModalVisible] = useState(false)
 
-
   useEffect(() => {
     setGuestName(localStorage.getItem('guestName'))
   }, [])
@@ -24,7 +23,7 @@ const Rsvp = () => {
   }
 
   const genPayload = () => {
-    return { attending, numOfGuests: additionalGuestsNum+1, guestNames: [guestName, ...guestNames.slice(0, additionalGuestsNum)], submittedBy: guestName, date: new Date() }
+    return { attending, numOfGuests: additionalGuestsNum + 1, guestNames: [guestName, ...guestNames.slice(0, additionalGuestsNum)], submittedBy: guestName, date: new Date() }
   }
 
   const handleSubmit = async (e) => {
@@ -43,7 +42,7 @@ const Rsvp = () => {
         <Paper style={styles.paper}>
           <form style={styles.form} onSubmit={handleSubmit}>
             <h2 style={styles.greetingText}>Hello {guestName},</h2>
-            <h3 style={{ marginBottom: 10 }}>Will you be able to attend our wedding? <span style={{fontSize: 28}}>{attending}</span></h3>
+            <h3 style={{ marginBottom: 10 }}>Will you be able to attend our wedding? <span style={{ fontSize: 28 }}>{attending}</span></h3>
             <ButtonGroup color="default" aria-label="outlined primary button group">
               <Button onClick={() => setAttending('yes')} style={{ backgroundColor: attending === 'yes' ? '#f8e7d1' : '' }}>Yes</Button>
               <Button onClick={() => setAttending('no')} style={{ backgroundColor: attending === 'no' ? '#f8e7d1' : '' }}>No</Button>
@@ -52,20 +51,20 @@ const Rsvp = () => {
             {attending !== null &&
               <div>
                 <FormControl style={{ marginTop: 10 }}>
-                  <h3>Invited guests that {attending === 'yes' ? 'will be attending?' : 'wont be able to make it?'} <span style={{fontSize: 28}}>{additionalGuestsNum+1}</span></h3>
-                  <div style={{ display: 'flex'}}>
+                  <h3>Invited guests that {attending === 'yes' ? 'will be attending?' : 'wont be able to make it?'} <span style={{ fontSize: 28 }}>{additionalGuestsNum + 1}</span></h3>
+                  <div style={{ display: 'flex' }}>
                     {/* <Input disabled type="number" value={additionalGuestsNum} style={{ width: '25%', fontFamily: 'Allura' }} /> */}
-                    <IconButton disabled={additionalGuestsNum <= 0} onClick={() => setAdditionalGuestsNum(prev => --prev) }><Remove /></IconButton>
-                    <IconButton disabled={additionalGuestsNum >= 5} onClick={() => setAdditionalGuestsNum(prev => ++prev) }><Add /></IconButton>
+                    <IconButton disabled={additionalGuestsNum <= 0} onClick={() => setAdditionalGuestsNum(prev => --prev)}><Remove /></IconButton>
+                    <IconButton disabled={additionalGuestsNum >= 5} onClick={() => setAdditionalGuestsNum(prev => ++prev)}><Add /></IconButton>
                   </div>
                 </FormControl>
               </div>
             }
 
             {attending !== null && <div>
-            <FormControl>
-              <Input placeholder="Guest 1" disabled style={{ fontFamily: 'Allura' }} value={guestName} />
-            </FormControl>
+              <FormControl>
+                <Input placeholder="Guest 1" disabled style={{ fontFamily: 'Allura' }} value={guestName} />
+              </FormControl>
             </div>}
 
             {additionalGuestsNum >= 0 && Array.from(Array(parseInt(additionalGuestsNum)), (_, i) => {

@@ -24,9 +24,9 @@ const customStyles = {
 };
 
 const AuthModal = ({ modalVisible, setModalVisible }) => {
-  const code = localStorage.getItem('secretCode') === (process.env.REACT_APP_SECRET_CODE) || 
-               localStorage.getItem('secretCode') === (process.env.REACT_APP_ADMIN_TOKEN)
-               ? localStorage.getItem('secretCode') : ''
+  const code = localStorage.getItem('secretCode') === (process.env.REACT_APP_SECRET_CODE) ||
+    localStorage.getItem('secretCode') === (process.env.REACT_APP_ADMIN_TOKEN)
+    ? localStorage.getItem('secretCode') : ''
   const history = useHistory()
   const [form, setForm] = useForm({ guestName: "", secretCode: code })
   const [snackbarVisible, setSnackbarVisible] = useState(false)
@@ -36,13 +36,17 @@ const AuthModal = ({ modalVisible, setModalVisible }) => {
     writeStorage('secretCode', form.secretCode)
   }, [form.secretCode])
 
-  const login = async () => {
-    if (process.env.REACT_APP_ADMIN_TOKEN === form.secretCode.toLowerCase()) history.push('/admin')
-    if (process.env.REACT_APP_SECRET_CODE === form.secretCode.toLowerCase() && form.guestName.trim().length > 0) {
+  const setAuth = async (e) => {
+    console.log(e)
+    e.preventDefault()
+    if (process.env.REACT_APP_ADMIN_TOKEN === form.secretCode) history.push('/admin')
+    if (process.env.REACT_APP_SECRET_CODE === form.secretCode && form.guestName.trim().length > 0) {
       localStorage.setItem('guestName', form.guestName)
       history.push('/rsvp')
     } else {
-      const err = process.env.REACT_APP_SECRET_CODE !== form.secretCode.toLowerCase() ? 'Incorrect Code' : 'Please provide your name'
+      let err
+      if (process.env.REACT_APP_SECRET_CODE !== form.secretCode) err = 'Incorrect Code'
+      if (form.guestName.length < 1) err = 'Please provide your name'
       setErrorMessage(err)
       setSnackbarVisible(true)
     }
@@ -56,12 +60,12 @@ const AuthModal = ({ modalVisible, setModalVisible }) => {
 
   return (
     <Modal isOpen={modalVisible} onRequestClose={() => setModalVisible(false)} style={customStyles}>
-    <Snackbar visible={snackbarVisible} setVisible={setSnackbarVisible} message={errorMessage} />
+      <Snackbar visible={snackbarVisible} setVisible={setSnackbarVisible} message={errorMessage} />
 
       <div style={styles.paper}>
         <h3 style={{ textAlign: 'center' }}>Please enter your name along with the secret code provided in the invitation.</h3>
         <h4 style={{ textAlign: 'center', marginTop: 10 }}>If you're responding for you and a guest (or your family), you'll be able to RSVP for your entire group.</h4>
-        <form onSubmit={e => e.preventDefault() && false} style={styles.form}>
+        <form onSubmit={e => setAuth(e)} style={styles.form}>
           <ThemeProvider theme={theme}>
             <FormControl margin="normal" fullWidth>
               <InputLabel htmlFor="secretCode">Secret Code</InputLabel>
@@ -73,7 +77,7 @@ const AuthModal = ({ modalVisible, setModalVisible }) => {
             </FormControl>
           </ThemeProvider>
           <div style={styles.buttonContainer}>
-            <Button style={styles.continueButton} type="submit" color="default" onClick={login}>
+            <Button style={styles.continueButton} type="submit" color="default">
               Continue
           </Button>
           </div>
