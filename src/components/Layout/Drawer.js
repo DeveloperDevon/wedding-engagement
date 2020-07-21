@@ -9,11 +9,11 @@ import AuthModal from '../Modals/AuthModal';
 
 const SideDrawer = ({ opened, setOpened }) => {
   const history = useHistory();
-  const { auth } = useContext(AuthContext)
+  const { auth, admin } = useContext(AuthContext)
   const [modalVisible, setModalVisible] = useState(false)
 
   const handleRsvpAndCloseModal = () => {
-    handleRsvp(auth, history, setModalVisible)
+    handleRsvp(auth, admin, history, setModalVisible)
     setOpened(prev => !prev)
   }
 

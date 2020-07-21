@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import { useHistory } from 'react-router-dom';
 import Snackbar from '../Common/Snackbar';
+import { useForm } from '../../hooks/useForm'
 
 Modal.setAppElement('#root')
 
@@ -23,27 +24,25 @@ const customStyles = {
 };
 
 const AuthModal = ({ modalVisible, setModalVisible }) => {
-  const code = localStorage.getItem('secretCode') === (process.env.REACT_APP_SECRET_CODE) || localStorage.getItem('secretCode') === (process.env.REACT_APP_ADMIN_TOKEN)
-    ? localStorage.getItem('secretCode')
-    : ''
+  const code = localStorage.getItem('secretCode') === (process.env.REACT_APP_SECRET_CODE) || 
+               localStorage.getItem('secretCode') === (process.env.REACT_APP_ADMIN_TOKEN)
+               ? localStorage.getItem('secretCode') : ''
   const history = useHistory()
-  const [guestName, setGuestName] = useState('')
-  const [secretCode, setSecretCode] = useState(code)
+  const [form, setForm] = useForm({ guestName: "", secretCode: code })
   const [snackbarVisible, setSnackbarVisible] = useState(false)
   const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
-    writeStorage('secretCode', secretCode)
-  }, [secretCode])
+    writeStorage('secretCode', form.secretCode)
+  }, [form.secretCode])
 
   const login = async () => {
-    console.log(process.env.REACT_APP_ADMIN_TOKEN, secretCode)
-    if (process.env.REACT_APP_ADMIN_TOKEN === secretCode.toLowerCase()) history.push('/admin')
-    if (process.env.REACT_APP_SECRET_CODE === secretCode.toLowerCase() && guestName.trim().length > 0) {
-      localStorage.setItem('guestName', guestName ? guestName : '')
+    if (process.env.REACT_APP_ADMIN_TOKEN === form.secretCode.toLowerCase()) history.push('/admin')
+    if (process.env.REACT_APP_SECRET_CODE === form.secretCode.toLowerCase() && form.guestName.trim().length > 0) {
+      localStorage.setItem('guestName', form.guestName)
       history.push('/rsvp')
     } else {
-      const err = process.env.REACT_APP_SECRET_CODE !== secretCode.toLowerCase() ? 'Incorrect Code' : 'Please provide your name'
+      const err = process.env.REACT_APP_SECRET_CODE !== form.secretCode.toLowerCase() ? 'Incorrect Code' : 'Please provide your name'
       setErrorMessage(err)
       setSnackbarVisible(true)
     }
@@ -66,11 +65,11 @@ const AuthModal = ({ modalVisible, setModalVisible }) => {
           <ThemeProvider theme={theme}>
             <FormControl margin="normal" fullWidth>
               <InputLabel htmlFor="secretCode">Secret Code</InputLabel>
-              <Input id="secretCode" name="secretCode" autoComplete="off" autoFocus value={secretCode} onChange={e => setSecretCode(e.target.value)} />
+              <Input id="secretCode" name="secretCode" autoComplete="off" autoFocus value={form.secretCode} onChange={setForm} />
             </FormControl>
             <FormControl margin="normal" fullWidth>
               <InputLabel htmlFor="guestName">Your name</InputLabel>
-              <Input id="guestName" name="guestName" autoComplete="off" value={guestName} onChange={e => setGuestName(e.target.value)} />
+              <Input id="guestName" name="guestName" autoComplete="off" value={form.guestName} onChange={setForm} />
             </FormControl>
           </ThemeProvider>
           <div style={styles.buttonContainer}>

@@ -10,13 +10,13 @@ import AuthModal from './Modals/AuthModal'
 const Showcase = () => {
   const [modalVisible, setModalVisible] = useState(false)
   const history = useHistory()
-  const { auth } = useContext(AuthContext)
+  const { auth, admin } = useContext(AuthContext)
 
   return (
     <div style={styles.container}>
       <div style={styles.textContainer}>
         <h1 style={styles.text}>We're Getting Married!</h1>
-        <Button onClick={() => handleRsvp(auth, history, setModalVisible)} variant="contained" style={styles.rsvpButton}>R.S.V.P.</Button>
+        <Button onClick={() => handleRsvp(auth, admin, history, setModalVisible)} variant="contained" style={styles.rsvpButton}>R.S.V.P.</Button>
 
         <AuthModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
       </div>

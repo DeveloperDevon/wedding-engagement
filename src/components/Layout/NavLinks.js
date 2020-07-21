@@ -7,12 +7,12 @@ import AuthModal from '../Modals/AuthModal';
 
 const NavLinks = () => {
   const history = useHistory()
-  const { auth } = useContext(AuthContext)
+  const { auth, admin } = useContext(AuthContext)
   const [modalVisible, setModalVisible] = useState(false)
 
   const links = [
     { label: 'Home', click: () => history.push('/') },
-    { label: 'RSVP', click: () => handleRsvp(auth, history, setModalVisible) },
+    { label: 'RSVP', click: () => handleRsvp(auth, admin, history, setModalVisible) },
     { label: 'Gallery', click: () => history.push('/gallery') },
     { label: 'Registry', click: goToRegistry },
   ]
