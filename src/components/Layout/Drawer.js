@@ -1,10 +1,10 @@
 import { Button } from "@material-ui/core";
 import Drawer from "@material-ui/core/Drawer";
-import { Home, PhotoLibrary, Reply, ShoppingCart } from "@material-ui/icons";
+import { Home, PhotoLibrary, Reply, ShoppingCart, FlightLand } from "@material-ui/icons";
 import React, { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { AuthContext } from '../../contexts/auth';
-import { goToRegistry, handleRsvp } from '../../helpers';
+import { goToRegistry, handleRsvp, goToHoneyFund } from '../../helpers';
 import AuthModal from '../Modals/AuthModal';
 
 const SideDrawer = ({ opened, setOpened }) => {
@@ -22,6 +22,7 @@ const SideDrawer = ({ opened, setOpened }) => {
     { label: "RSVP", icon: <Reply />, click: handleRsvpAndCloseModal },
     { label: "Gallery", icon: <PhotoLibrary />, click: () => history.push("/gallery") },
     { label: "Registry", icon: <ShoppingCart />, click: goToRegistry },
+    { label: "Honeyfund", icon: <FlightLand />, click: goToHoneyFund },
   ];
 
   return (

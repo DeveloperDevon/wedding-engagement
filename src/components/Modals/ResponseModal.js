@@ -2,7 +2,7 @@ import { Button } from '@material-ui/core'
 import React from 'react'
 import Modal from 'react-modal'
 import { useHistory } from 'react-router-dom'
-import { goToRegistry } from '../../helpers'
+import { goToRegistry, goToHoneyFund } from '../../helpers'
 
 Modal.setAppElement('#root')
 
@@ -27,10 +27,11 @@ const ResponseModal = ({ modalVisible, setModalVisible, attending }) => {
         {attending === 'no' && <h2 style={{ textAlign: 'center' }}>We're sorry you are unable to make it. We hope to celebrate with you soon!</h2>}
         {attending === 'yes' && <h2 style={{ textAlign: 'center' }}>We're so happy you are able to make it and can not wait to celebrate!</h2>}
 
-        <h3 style={{ textAlign: 'center', marginTop: 20 }}>What next?</h3>
+        {/* <h3 style={{ textAlign: 'center', marginTop: 20 }}>What next?</h3> */}
 
         <div style={styles.buttonContainer}>
-          <Button style={styles.button} onClick={goToRegistry}>Visit Registry</Button>
+          {/* <Button style={styles.button} onClick={goToRegistry}>Visit Registry</Button> */}
+          {/* <Button style={styles.button} onClick={goToHoneyFund}>View HoneyFund</Button> */}
           <Button style={styles.button} onClick={() => history.push('/gallery')}>View Gallery</Button>
         </div>
 
@@ -58,6 +59,7 @@ const styles = {
   },
   buttonContainer: {
     display: 'flex',
+    flexWrap: 'wrap',
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginTop: 20,

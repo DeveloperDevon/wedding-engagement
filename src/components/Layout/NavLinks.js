@@ -2,7 +2,7 @@ import { Button } from '@material-ui/core';
 import React, { useContext, useState } from "react";
 import { useHistory } from 'react-router-dom';
 import { AuthContext } from '../../contexts/auth';
-import { goToRegistry, handleRsvp } from '../../helpers';
+import { goToRegistry, handleRsvp, goToHoneyFund } from '../../helpers';
 import AuthModal from '../Modals/AuthModal';
 
 const NavLinks = () => {
@@ -15,6 +15,7 @@ const NavLinks = () => {
     { label: 'RSVP', click: () => handleRsvp(auth, admin, history, setModalVisible) },
     { label: 'Gallery', click: () => history.push('/gallery') },
     { label: 'Registry', click: goToRegistry },
+    { label: 'HoneyFund', click: goToHoneyFund },
   ]
 
   return (

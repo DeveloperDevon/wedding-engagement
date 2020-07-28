@@ -21,8 +21,16 @@ const Admin = () => {
     setResponses(value?.docs.map(doc => doc.data()))
   }, [isLoading, value, hasError])
 
+  // const getNumOfGuests = (arr, condition) => {
+  //   if (responses) {
+  //     return parseInt(arr.filter(response => response.attending === condition).reduce((a, b) => a.numOfGuests + b.numOfGuests))
+  //   } else {
+  //     return null
+  //   }
+  // }
+
   const getNumOfGuests = (arr, condition) => {
-    return parseInt(arr.filter(response => response.attending === condition).reduce((a, b) => a.numOfGuests + b.numOfGuests))
+    return arr.filter(response => response.attending === condition).reduce((acc, item) => acc + item.numOfGuests, 0)
   }
 
   return (
@@ -30,11 +38,12 @@ const Admin = () => {
       : error ? <div>Error</div>
         :
         <Layout>
-          {/* <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: 10, fontFamily: "Allura" }}>
+          {responses && <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: 10, fontFamily: "Allura" }}>
             <h3>Attending: {getNumOfGuests(responses, 'yes')}</h3>
             <h3>Not Attending: {getNumOfGuests(responses, 'no')}</h3>
             <h3>Responses: {getNumOfGuests(responses, 'yes') + getNumOfGuests(responses, 'no')}</h3>
-          </div> */}
+          </div>}
+          {/* <pre>{JSON.stringify(responses, null, 2)}</pre> */}
           <TableContainer style={{ marginTop: 25 }} component={Paper}>
             <h2 style={{ width: '100%', textAlign: 'center', fontFamily: "Allura", textDecoration: 'underline' }}>Guestlist</h2>
             <Table>
