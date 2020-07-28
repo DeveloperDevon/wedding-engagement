@@ -8,16 +8,17 @@ export const AuthContext = createContext({})
 export const AuthProvider = ({ children }) => {
   const [_, loading, error] = useAuthState(auth())
   const [authContext, setAuthContext] = useState(null)
-  const [secretCode] = useLocalStorage('secretCode');
+  const [guestName] = useLocalStorage('guestName');
 
   useEffect(() => {
+    console.log(guestName)
     setAuthContext({
-      auth: secretCode === process.env.REACT_APP_SECRET_CODE,
-      admin: secretCode === process.env.REACT_APP_ADMIN_TOKEN,
+      auth: !!guestName && guestName !== process.env.REACT_APP_ADMIN_TOKEN,
+      admin: guestName === process.env.REACT_APP_ADMIN_TOKEN,
       loading,
       error
     })
-  }, [secretCode, loading, error])
+  }, [guestName, loading, error])
 
   return (
     <AuthContext.Provider value={authContext}>

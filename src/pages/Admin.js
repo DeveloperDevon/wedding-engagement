@@ -30,11 +30,11 @@ const Admin = () => {
       : error ? <div>Error</div>
         :
         <Layout>
-          <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: 10, fontFamily: "Allura" }}>
+          {/* <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: 10, fontFamily: "Allura" }}>
             <h3>Attending: {getNumOfGuests(responses, 'yes')}</h3>
             <h3>Not Attending: {getNumOfGuests(responses, 'no')}</h3>
-            {/* <h3>Responses: {getNumOfGuests(responses, 'yes') + getNumOfGuests(responses, 'no')}</h3> */}
-          </div>
+            <h3>Responses: {getNumOfGuests(responses, 'yes') + getNumOfGuests(responses, 'no')}</h3>
+          </div> */}
           <TableContainer style={{ marginTop: 25 }} component={Paper}>
             <h2 style={{ width: '100%', textAlign: 'center', fontFamily: "Allura", textDecoration: 'underline' }}>Guestlist</h2>
             <Table>

@@ -21,6 +21,7 @@ const AppRouter = () => {
   const auth = useContext(AuthContext)
   if (!auth || auth?.loading) return <div>Loading...</div>
   if (auth?.error) return <div>Error {auth.error}</div>
+  console.log('AUTH', auth)
 
   return (
     <BrowserRouter>
